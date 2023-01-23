@@ -1,0 +1,13 @@
+kubectl label nodes worker3 worker3=linstor
+kubectl label nodes worker4 worker4=linstor
+kubectl label nodes worker5 worker5=linstor
+
+
+kubectl taint nodes worker1 app=linstor:NoSchedule
+kubectl taint nodes k8sn4 app=linstor:NoSchedule
+
+kubectl patch configmap/kube-root-ca.crt \
+    --type json \
+    --patch='[ { "op": "remove", "path": "/metadata/finalizers" } ]'
+
+kubectl patch -p '{"metadata": {"$deleteFromPrimitiveList/finalizers": ["piraeus.linbit.com/protect-master-passphrase"]}}' secret piraeus-op-passphrase
